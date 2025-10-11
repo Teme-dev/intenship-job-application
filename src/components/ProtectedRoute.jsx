@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import Loader from './Loader';
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
 
   if (loading) {
     return <Loader fullScreen />;
@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+  if (allowedRoles.length > 0 && profile && !allowedRoles.includes(profile.role)) {
     return <Navigate to="/" replace />;
   }
 

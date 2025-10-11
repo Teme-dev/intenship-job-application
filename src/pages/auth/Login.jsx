@@ -25,24 +25,11 @@ const Login = () => {
     setError('');
 
     try {
-      const userData = await authAPI.login(formData.email, formData.password);
-      login(userData);
+      await login(formData.email, formData.password);
 
-      switch (userData.role) {
-        case 'student':
-          navigate('/student/dashboard');
-          break;
-        case 'recruiter':
-          navigate('/recruiter/dashboard');
-          break;
-        case 'admin':
-          navigate('/admin/dashboard');
-          break;
-        default:
-          navigate('/');
-      }
+      window.location.reload();
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || 'Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
     }

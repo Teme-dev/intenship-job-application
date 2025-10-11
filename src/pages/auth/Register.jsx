@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { authAPI } from '../../utils/api';
 import { UserPlus, Mail, Lock, User, Building, GraduationCap, AlertCircle } from 'lucide-react';
 
 const Register = () => {
@@ -24,7 +23,7 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -51,17 +50,25 @@ const Register = () => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setLoading(false);
+      return;
+    }
+
     try {
       const userData = {
-        email: formData.email,
-        password: formData.password,
-        name: formData.name,
         role,
-        ...(role === 'student' ? studentData : recruiterData),
+        full_name: formData.name,
+        phone: '',
+        education: role === 'student' ? studentData.university : undefined,
+        degree: role === 'student' ? studentData.degree : undefined,
+        graduation_year: role === 'student' ? parseInt(studentData.graduationYear) : undefined,
+        position: role === 'recruiter' ? 'Recruiter' : undefined,
+        skills: [],
       };
 
-      const newUser = await authAPI.register(userData);
-      login(newUser);
+      await register(formData.email, formData.password, userData);
 
       if (role === 'student') {
         navigate('/student/dashboard');

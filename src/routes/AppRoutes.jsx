@@ -26,11 +26,11 @@ import AdminDashboard from '../pages/admin/Dashboard';
 import AdminUsers from '../pages/admin/Users';
 
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   const getDefaultRoute = () => {
-    if (!user) return '/';
-    switch (user.role) {
+    if (!user || !profile) return '/';
+    switch (profile.role) {
       case 'student':
         return '/student/dashboard';
       case 'recruiter':

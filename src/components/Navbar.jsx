@@ -4,18 +4,18 @@ import { Briefcase, LogOut, User, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
   };
 
   const getDashboardLink = () => {
-    if (!user) return '/';
-    switch (user.role) {
+    if (!user || !profile) return '/';
+    switch (profile.role) {
       case 'student':
         return '/student/dashboard';
       case 'recruiter':
@@ -65,7 +65,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                {user.role === 'student' && (
+                {profile?.role === 'student' && (
                   <>
                     <Link
                       to="/student/dashboard"
@@ -88,7 +88,7 @@ const Navbar = () => {
                   </>
                 )}
 
-                {user.role === 'recruiter' && (
+                {profile?.role === 'recruiter' && (
                   <>
                     <Link
                       to="/recruiter/dashboard"
@@ -111,7 +111,7 @@ const Navbar = () => {
                   </>
                 )}
 
-                {user.role === 'admin' && (
+                {profile?.role === 'admin' && (
                   <>
                     <Link
                       to="/admin/dashboard"
@@ -130,11 +130,11 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-4">
                   <Link
-                    to={user.role === 'student' ? '/student/profile' : '#'}
+                    to={profile?.role === 'student' ? '/student/profile' : '#'}
                     className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
                   >
                     <User className="w-5 h-5" />
-                    <span className="font-medium">{user.name}</span>
+                    <span className="font-medium">{profile?.full_name}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -202,9 +202,9 @@ const Navbar = () => {
               <>
                 <div className="border-b pb-3 mb-3">
                   <p className="text-sm text-gray-500">Signed in as</p>
-                  <p className="font-semibold text-gray-800">{user.name}</p>
+                  <p className="font-semibold text-gray-800">{profile?.full_name}</p>
                 </div>
-                {user.role === 'student' && (
+                {profile?.role === 'student' && (
                   <>
                     <Link
                       to="/student/dashboard"
@@ -236,7 +236,7 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
-                {user.role === 'recruiter' && (
+                {profile?.role === 'recruiter' && (
                   <>
                     <Link
                       to="/recruiter/dashboard"
@@ -261,7 +261,7 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
-                {user.role === 'admin' && (
+                {profile?.role === 'admin' && (
                   <>
                     <Link
                       to="/admin/dashboard"
