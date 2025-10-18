@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { jobAPI, applicationAPI } from '../../utils/api';
+import { getCompanyName } from '../../utils/helpers';
 import Sidebar from '../../components/Sidebar';
 import JobCard from '../../components/JobCard';
 import Modal from '../../components/Modal';
@@ -51,9 +52,11 @@ const JobSearch = () => {
 
     if (filters.search) {
       result = result.filter(
-        (job) =>
-          job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-          job.company.toLowerCase().includes(filters.search.toLowerCase())
+        (job) => {
+          const companyName = getCompanyName(job.company);
+          return job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+            (companyName && companyName.toLowerCase().includes(filters.search.toLowerCase()));
+        }
       );
     }
 
@@ -207,7 +210,9 @@ const JobSearch = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-bold text-gray-800 mb-2">{selectedJob.title}</h3>
-              <p className="text-blue-600 font-semibold">{selectedJob.company}</p>
+              <p className="text-blue-600 font-semibold">
+                {getCompanyName(selectedJob.company)}
+              </p>
             </div>
 
             <div>

@@ -1,12 +1,16 @@
 import { MapPin, Briefcase, DollarSign, Calendar, Users } from 'lucide-react';
+import { getCompanyName, getJobPostedDate } from '../utils/helpers';
 
 const JobCard = ({ job, onApply, showApplicants = false }) => {
+  const companyName = getCompanyName(job.company);
+  const postedDate = getJobPostedDate(job);
+
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6 border border-gray-100">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">{job.title}</h3>
-          <p className="text-blue-600 font-semibold">{job.company}</p>
+          <p className="text-blue-600 font-semibold">{companyName}</p>
         </div>
         <span
           className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -36,7 +40,7 @@ const JobCard = ({ job, onApply, showApplicants = false }) => {
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <Calendar className="w-4 h-4" />
-          <span className="text-sm">Posted on {job.postedDate}</span>
+          <span className="text-sm">Posted on {postedDate}</span>
         </div>
         {showApplicants && (
           <div className="flex items-center gap-2 text-gray-600">

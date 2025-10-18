@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { applicationAPI } from '../../utils/api';
+import { getCompanyName, getApplicationDate, getCoverLetter } from '../../utils/helpers';
 import Sidebar from '../../components/Sidebar';
 import Loader from '../../components/Loader';
 import { CheckCircle, XCircle, Clock, Calendar, Briefcase } from 'lucide-react';
@@ -143,7 +144,7 @@ const AppliedJobs = () => {
                           {application.job.title}
                         </h3>
                         <p className="text-blue-600 font-semibold mb-2">
-                          {application.job.company}
+                          {getCompanyName(application.job.company)}
                         </p>
                         <div className="flex items-center gap-4 text-sm text-gray-600">
                           <span className="flex items-center gap-1">
@@ -152,7 +153,7 @@ const AppliedJobs = () => {
                           </span>
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
-                            Applied on {application.appliedDate}
+                            Applied on {getApplicationDate(application)}
                           </span>
                         </div>
                       </div>
@@ -168,7 +169,7 @@ const AppliedJobs = () => {
 
                     <div className="border-t pt-4">
                       <p className="text-sm font-medium text-gray-700 mb-2">Cover Letter:</p>
-                      <p className="text-gray-600 text-sm">{application.coverLetter}</p>
+                      <p className="text-gray-600 text-sm">{getCoverLetter(application)}</p>
                     </div>
 
                     <div className="border-t pt-4 mt-4">

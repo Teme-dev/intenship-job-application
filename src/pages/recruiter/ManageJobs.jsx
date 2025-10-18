@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { jobAPI } from '../../utils/api';
+import { getCompanyName } from '../../utils/helpers';
 import Sidebar from '../../components/Sidebar';
 import JobCard from '../../components/JobCard';
 import Modal from '../../components/Modal';
@@ -90,7 +91,9 @@ const ManageJobs = () => {
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="text-xl font-bold text-gray-800 mb-2">{job.title}</h3>
-                      <p className="text-blue-600 font-semibold mb-2">{job.company}</p>
+                      <p className="text-blue-600 font-semibold mb-2">
+                        {getCompanyName(job.company)}
+                      </p>
                       <div className="flex items-center gap-4 text-sm text-gray-600">
                         <span>{job.location}</span>
                         <span>•</span>
