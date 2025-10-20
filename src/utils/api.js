@@ -7,6 +7,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000,
 });
 
 api.interceptors.request.use(
@@ -18,6 +19,23 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK') {
+      const customError = new Error('Cannot connect to server. Please ensure the backend is running on http://localhost:5000');
+      customError.isNetworkError = true;
+      return Promise.reject(customError);
+    }
+
+    if (error.response) {
+      return Promise.reject(new Error(error.response.data?.message || 'Server error occurred'));
+    }
+
     return Promise.reject(error);
   }
 );
